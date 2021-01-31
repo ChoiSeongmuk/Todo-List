@@ -17,13 +17,16 @@ listControl.generate = function() {
     
     function submitClicked(e){
         //추가
+        var time = new Date();
+        
+
         listNumber += 1;
         editNumber += 1;
         var text = document.getElementById("inputValue").value;
-        var timeDiv = elt("div",{class: "time"},"시간");
+        var timeDiv = elt("div",{class: "time"},time.getFullYear() + "년" + (time.getMonth() + 1) + "월" +time.getDate() + "일" + time.getHours() + "시" + time.getMinutes() + "분");
         var subtitle = elt("p",null,text);
         var titldDiv = elt("div",{class: "subtitle"},subtitle);
-        var editbtn = elt("input", {type: "button", id:"##"+listNumber,value: "수정"});
+        var editbtn = elt("input", {type: "button", id:"##"+editNumber,value: "수정"});
         var removebtn = elt("input", {type: "button",id: "#"+listNumber ,value: "삭제"});
         var buttonDiv = elt("div", {class:"changeButton"},editbtn,removebtn);
         var listDiv = elt("div",{class: "list", id:listNumber},timeDiv,titldDiv,buttonDiv);
@@ -48,15 +51,13 @@ listControl.generate = function() {
                 editBtn.addEventListener("click",function(){
                     var editText = prompt("입력하세요");
                     var newSubTitle = elt("p",null,editText);
-                    console.log(subtitle);
-                    
                     subtitle.parentNode.replaceChild(newSubTitle, subtitle);
                 },false);
             }();
 
         });
 
-        //입력
+        
 
     }
     
