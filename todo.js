@@ -116,10 +116,6 @@
 
     todoList.push(new Todo(todoContent));
     renderTodoList();
-    var topNav = document.getElementById("topNav");
-    var lineUpByTime = elt("input", { type: "Button", value: "정렬" });
-    var lineUpBtnDiv = elt("div", { id: "order" }, lineUpByTime);
-    topNav.appendChild(lineUpBtnDiv);
   }
 
   function editTodo(id, newContent) {
