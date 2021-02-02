@@ -32,11 +32,31 @@
       "에러!" + e;
     }
   }
+  function* generateID() {
+    const candidates =
+      "abcdefghijklmmopqrstvwuxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
 
+    const idLength = 20;
+    while (true) {
+      let id = "";
+      for (let l = 0; l < idLength; l++) {
+        const randomIndex = parseInt(
+          (Math.random() * 1000) % candidates.length
+        );
+        id += candidates[randomIndex];
+      }
+
+      if (todoList.find(todo => todo.id === id)) continue;
+
+      yield id;
+    }
+  }
+
+  const idGenerator = generateID();
   function Todo(content, time, id) {
     this.content = content;
     this.time = time ?? getCurrentTimeString();
-    this.id = id ?? parseInt(Math.random() * 1000);
+    this.id = id ?? idGenerator.next().value;
   }
 
   Todo.prototype.drawInHtml = function () {
@@ -84,7 +104,6 @@
     todoList = todoList.filter(function (todo) {
       return todo.id !== id;
     });
-
     renderTodoList();
   };
 
@@ -97,6 +116,10 @@
 
     todoList.push(new Todo(todoContent));
     renderTodoList();
+    var topNav = document.getElementById("topNav");
+    var lineUpByTime = elt("input", { type: "Button", value: "정렬" });
+    var lineUpBtnDiv = elt("div", { id: "order" }, lineUpByTime);
+    topNav.appendChild(lineUpBtnDiv);
   }
 
   function editTodo(id, newContent) {
