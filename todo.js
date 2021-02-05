@@ -57,8 +57,8 @@
     try {
       const parsedTodoList = JSON.parse(localStorage.getItem("todoList"));
       todoList = parsedTodoList.map(pTodo => {
-        const { content, fullTime, time, id } = pTodo;
-        return new Todo(content, fullTime, time, id);
+        const { content, fullTime, code, time, id } = pTodo;
+        return new Todo(content, fullTime, code, time, id);
       });
     } catch (e) {
       console.error;
@@ -102,10 +102,29 @@
     },
     false
   );
+  const sortByContent = document.getElementById("sortyByContent");
+
+  let isSortedByContentAscend = false;
+  sortByContent.addEventListener(
+    "click",
+    function () {
+      todoList = todoList.sort(function (a, b) {
+        if (isSortedByContentAscend) {
+          return a.code - b.code;
+        } else {
+          return b.code - a.code;
+        }
+      });
+      renderTodoList();
+      isSortedByContentAscend = !isSortedByContentAscend;
+    },
+    false
+  );
 
   const idGenerator = generateID();
 
-  function Todo(content, fullTime, time, id) {
+  function Todo(content, fullTime, code, time, id) {
+    this.code = code;
     this.fullTime = fullTime ?? new Date.yyyymmddhhmmss();
     this.content = content;
     this.time = time ?? getCurrentTimeString();
@@ -164,12 +183,13 @@
     const todoContent = document.getElementById("inputValue").value;
     const fullTimeIs = new Date();
     const stringTime = fullTimeIs.yyyymmddhhmmss();
+    const parsedCode = todoContent.slice(0, 1).charCodeAt(0);
     if (!todoContent) {
       alert("입력하쇼");
       return;
     }
 
-    todoList.push(new Todo(todoContent, stringTime));
+    todoList.push(new Todo(todoContent, stringTime, parsedCode));
     renderTodoList();
   }
 
