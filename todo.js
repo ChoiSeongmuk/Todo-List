@@ -1,4 +1,29 @@
 (function () {
+  Date.prototype.yyyymmdd = function () {
+    var mm = this.getMonth() + 1;
+    var dd = this.getDate();
+
+    return [
+      this.getFullYear(),
+      (mm > 9 ? "" : "0") + mm,
+      (dd > 9 ? "" : "0") + dd
+    ].join("");
+  };
+  Date.prototype.hhmmss = function () {
+    var hh = this.getHours();
+    var mm = this.getMinutes();
+    var ss = this.getSeconds();
+
+    return [
+      (hh > 9 ? "" : "0") + hh,
+      (mm > 9 ? "" : "0") + mm,
+      (ss > 9 ? "" : "0") + ss
+    ].join("");
+  };
+  Date.prototype.yyyymmddhhmmss = function () {
+    return parseInt(this.yyyymmdd() + this.hhmmss());
+  };
+
   function getCurrentTimeString() {
     var time = new Date();
     return (
@@ -14,6 +39,14 @@
       "분"
     );
   }
+  function getFullToday() {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = ("0" + (1 + date.getMonth())).slice(-2);
+    var day = ("0" + date.getDate()).slice(-2);
+    var hours = ("0" + date.getDate()).slice(-2);
+    return year + month + day + hours;
+  }
 
   let todoList = [];
   //저장된 값 불러오기
@@ -24,8 +57,8 @@
     try {
       const parsedTodoList = JSON.parse(localStorage.getItem("todoList"));
       todoList = parsedTodoList.map(pTodo => {
-        const { content, time, id } = pTodo;
-        return new Todo(content, time, id);
+        const { content, fullTime, time, id } = pTodo;
+        return new Todo(content, fullTime, time, id);
       });
     } catch (e) {
       console.error;
@@ -52,8 +85,28 @@
     }
   }
 
+  const sortByTimeButton = document.getElementById("sortByTime");
+  let isSortedByTimeAscend = false;
+  sortByTimeButton.addEventListener(
+    "click",
+    function () {
+      todoList = todoList.sort(function compare(a, b) {
+        if (isSortedByTimeAscend) {
+          return a.fullTime - b.fullTime;
+        } else {
+          return b.fullTime - a.fullTime;
+        }
+      });
+      renderTodoList();
+      isSortedByTimeAscend = !isSortedByTimeAscend;
+    },
+    false
+  );
+
   const idGenerator = generateID();
-  function Todo(content, time, id) {
+
+  function Todo(content, fullTime, time, id) {
+    this.fullTime = fullTime ?? new Date.yyyymmddhhmmss();
     this.content = content;
     this.time = time ?? getCurrentTimeString();
     this.id = id ?? idGenerator.next().value;
@@ -109,12 +162,14 @@
 
   function addTodo() {
     const todoContent = document.getElementById("inputValue").value;
+    const fullTimeIs = new Date();
+    const stringTime = fullTimeIs.yyyymmddhhmmss();
     if (!todoContent) {
       alert("입력하쇼");
       return;
     }
 
-    todoList.push(new Todo(todoContent));
+    todoList.push(new Todo(todoContent, stringTime));
     renderTodoList();
   }
 

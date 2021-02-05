@@ -34,7 +34,6 @@ body {
   width: 10%;
   height: 25px;
   margin-top: 10px;
-  margin-bottom: 10px;
 }
 
 .content-wrap {
@@ -80,4 +79,18 @@ body {
 #order {
   display: flex;
   justify-content: flex-end;
+}
+
+.sort {
+  width: 100%;
+  padding-right: 40px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+#sortByTime {
+  margin-right: 10px;
 }

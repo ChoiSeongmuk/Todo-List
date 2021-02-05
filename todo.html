@@ -8,7 +8,6 @@
     <!-- async -->
     <!-- defer -->
     <script defer src="./todo.js"></script>
-
     <link rel="stylesheet" href="./todo.css" />
     <title>Todo-List</title>
   </head>
@@ -21,6 +20,10 @@
         placeholder="해야할 일을 입력하세요."
       />
       <input id="submitButton" type="submit" value="확인" />
+      <div class="sort">
+        <input id="sortByTime" type="button" value="시간순" />
+        <input id="sortyByContent" type="button" value="내용순" />
+      </div>
     </div>
     <div class="content-wrap" id="contentWrap"></div>
   </body>
