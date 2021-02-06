@@ -39,14 +39,6 @@
       "분"
     );
   }
-  function getFullToday() {
-    var date = new Date();
-    var year = date.getFullYear();
-    var month = ("0" + (1 + date.getMonth())).slice(-2);
-    var day = ("0" + date.getDate()).slice(-2);
-    var hours = ("0" + date.getDate()).slice(-2);
-    return year + month + day + hours;
-  }
 
   let todoList = [];
   //저장된 값 불러오기
@@ -102,22 +94,19 @@
     },
     false
   );
+
   const sortByContent = document.getElementById("sortyByContent");
 
   let isSortedByContentAscend = false;
 
   sortByContent.addEventListener("click", function () {
     todoList = todoList.sort(function (a, b) {
-      for (var i = 0, v = 0; i < a.code.length, v < b.code.length; i++, v++) {
-        if (b.code.charCodeAt(v) == a.code.charCodeAt(i)) {
-          continue;
-        } else {
-          if (isSortedByContentAscend) {
-            return b.code.charCodeAt(v) - a.code.charCodeAt(i);
-          } else {
-            return a.code.charCodeAt(v) - b.code.charCodeAt(i);
-          }
-        }
+      if (a.code < b.code || isSortedByContentAscend) {
+        return -1;
+      } else if (a.code > b.code || !isSortedByContentAscend) {
+        return 1;
+      } else {
+        return 0;
       }
     }, false);
     isSortedByContentAscend = !isSortedByContentAscend;
