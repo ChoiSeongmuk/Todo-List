@@ -105,21 +105,24 @@
   const sortByContent = document.getElementById("sortyByContent");
 
   let isSortedByContentAscend = false;
-  sortByContent.addEventListener(
-    "click",
-    function () {
-      todoList = todoList.sort(function (a, b) {
-        if (isSortedByContentAscend) {
-          return a.code - b.code;
+
+  sortByContent.addEventListener("click", function () {
+    todoList = todoList.sort(function (a, b) {
+      for (var i = 0, v = 0; i < a.code.length, v < b.code.length; i++, v++) {
+        if (b.code.charCodeAt(v) == a.code.charCodeAt(i)) {
+          continue;
         } else {
-          return b.code - a.code;
+          if (isSortedByContentAscend) {
+            return b.code.charCodeAt(v) - a.code.charCodeAt(i);
+          } else {
+            return a.code.charCodeAt(v) - b.code.charCodeAt(i);
+          }
         }
-      });
-      renderTodoList();
-      isSortedByContentAscend = !isSortedByContentAscend;
-    },
-    false
-  );
+      }
+    }, false);
+    isSortedByContentAscend = !isSortedByContentAscend;
+    renderTodoList();
+  });
 
   const idGenerator = generateID();
 
@@ -183,7 +186,7 @@
     const todoContent = document.getElementById("inputValue").value;
     const fullTimeIs = new Date();
     const stringTime = fullTimeIs.yyyymmddhhmmss();
-    const parsedCode = todoContent.slice(0, 1).charCodeAt(0);
+    const parsedCode = todoContent;
     if (!todoContent) {
       alert("입력하쇼");
       return;
