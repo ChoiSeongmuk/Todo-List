@@ -209,6 +209,7 @@
     renderTodoList();
   }
   function renderTodoList() {
+    document.getElementById("inputValue").value = null;
     document.getElementById("contentWrap").innerHTML = "";
     const stringTodoList = JSON.stringify(todoList);
     localStorage.setItem("todoList", stringTodoList);
