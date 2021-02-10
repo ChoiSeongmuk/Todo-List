@@ -74,49 +74,6 @@
     }
   }
 
-  const sortByTimeButton = document.getElementById("sortByTime");
-  let isSortedByTimeAscend = false;
-  sortByTimeButton.addEventListener(
-    "click",
-    function () {
-      todoList = todoList.sort(function compare(a, b) {
-        if (isSortedByTimeAscend) {
-          return a.fullTime - b.fullTime;
-        } else {
-          return b.fullTime - a.fullTime;
-        }
-      });
-      renderTodoList();
-      isSortedByTimeAscend = !isSortedByTimeAscend;
-    },
-    false
-  );
-
-  const sortByContent = document.getElementById("sortyByContent");
-
-  let isSortedByContentAscend = false;
-
-  sortByContent.addEventListener("click", function () {
-    todoList = todoList.sort(function (a, b) {
-      if (isSortedByContentAscend) {
-        if (a.content < b.content) {
-          return -1;
-        } else if (a.content > b.content) {
-          return 1;
-        }
-      } else {
-        if (a.content > b.content) {
-          return -1;
-        } else if (a.content < b.content) {
-          return 1;
-        }
-      }
-      return 0;
-    }, false);
-    isSortedByContentAscend = !isSortedByContentAscend;
-    renderTodoList();
-  });
-
   const idGenerator = generateID();
 
   function Todo(content, fullTime, time, id) {
@@ -195,18 +152,6 @@
     renderTodoList();
   };
 
-  function addTodo() {
-    const todoContent = document.getElementById("inputValue").value;
-    const fullTimeIs = new Date();
-    const stringTime = fullTimeIs.yyyymmddhhmmss();
-    if (!todoContent) {
-      alert("입력하쇼");
-      return;
-    }
-    todoList.push(new Todo(todoContent, stringTime));
-    renderTodoList();
-  }
-
   function editTodo(id, newContent) {
     const todo = todoList.find(function (todo) {
       return id === todo.id;
@@ -234,15 +179,157 @@
     now.innerHTML = getCurrentTimeString();
     day.innerHTML = week[today.getDay()];
     tasksLeft.innerHTML = "할일 " + todoList.length + "개 남음";
-    document.getElementById("inputValue").value = null;
     document.getElementById("contentWrap").innerHTML = "";
     const stringTodoList = JSON.stringify(todoList);
     localStorage.setItem("todoList", stringTodoList);
     todoList.map(todo => todo.drawInHtml());
   }
 
-  var button = document.getElementById("submitButton");
-  button.addEventListener("click", addTodo);
+  let isClicked = new Object(null);
+  isClicked.bool = false;
+  const extendBtn = document.getElementById("extendBtn");
+  const form = document.getElementById("Form");
 
+  //extend 버튼
+
+  extendBtn.addEventListener("click", click, false);
+  function click() {
+    const boxing = elt("div", { class: "input-box", id: "inputBox" });
+    Elements.inputBox = boxing;
+    if (isClicked.bool) {
+      extendBtn.style.transform = "rotate(0deg)";
+      Elements.boxOutput.style.display = "none";
+      console.log("true");
+    } else if (!isClicked.bool) {
+      extendBtn.style.transform = "rotate(215deg)";
+      extendBtn.style.transition = "0.125s all ease-in";
+      if (!Elements.boxOutput) {
+        Elements.inputBox.style.display = "block";
+      } else {
+        Elements.boxOutput.style.display = "block";
+      }
+      console.log("false");
+    }
+    isClicked.bool = !isClicked.bool;
+  }
+  extendBtn.addEventListener(
+    "click",
+    function () {
+      promise();
+    },
+    { once: true }
+  );
+
+  // 생성
+  function generateInput() {
+    const inputValue = elt("input", {
+      id: "inputValue",
+      type: "text",
+      placeholder: "해야할 일을 입력하세요.",
+      maxlength: "40"
+    });
+    const submit = elt("input", {
+      type: "submit",
+      value: "확인",
+      id: "submitButton"
+    });
+    const sortByTime = elt("input", {
+      id: "sortByTime",
+      type: "button",
+      value: "시간순"
+    });
+    const sortByContent = elt("input", {
+      id: "sortByContent",
+      type: "button",
+      value: "내용순"
+    });
+
+    const sort = elt("div", { class: "sort" }, sortByTime, sortByContent);
+    const inputDiv = elt(
+      "div",
+      { class: "inputWrap" },
+      inputValue,
+      submit,
+      sort
+    );
+    form.insertBefore(Elements.inputBox, extendBtn);
+    Elements.inputBox.appendChild(inputDiv);
+    new Elements(sortByContent, sortByTime);
+  }
+  function sortByContent() {
+    let isSortedByContentAscend = false;
+
+    this.sortByContent.addEventListener("click", function () {
+      todoList = todoList.sort(function (a, b) {
+        if (isSortedByContentAscend) {
+          if (a.content < b.content) {
+            return -1;
+          } else if (a.content > b.content) {
+            return 1;
+          }
+        } else {
+          if (a.content > b.content) {
+            return -1;
+          } else if (a.content < b.content) {
+            return 1;
+          }
+        }
+        return 0;
+      }, false);
+      isSortedByContentAscend = !isSortedByContentAscend;
+      renderTodoList();
+    });
+  }
+  function sortByTime() {
+    const sortByTimeButton = document.getElementById("sortByTime");
+    let isSortedByTimeAscend = false;
+    sortByTimeButton.addEventListener(
+      "click",
+      function () {
+        todoList = todoList.sort(function compare(a, b) {
+          if (isSortedByTimeAscend) {
+            return a.fullTime - b.fullTime;
+          } else {
+            return b.fullTime - a.fullTime;
+          }
+        });
+        renderTodoList();
+        isSortedByTimeAscend = !isSortedByTimeAscend;
+      },
+      false
+    );
+  }
+  function Elements(content, time, box) {
+    this.sortByContentBtn = content;
+    this.sortByTimeBtn = time;
+    this.inputBox = box;
+  }
+
+  function promise() {
+    const promise = new Promise(resolve => {
+      generateInput();
+      resolve();
+    });
+
+    promise.then(value => {
+      sortByContent();
+      sortByTime();
+      var button = document.getElementById("submitButton");
+      button.addEventListener("click", addTodo);
+    });
+    function addTodo() {
+      const todoContent = document.getElementById("inputValue").value;
+      const fullTimeIs = new Date();
+      const stringTime = fullTimeIs.yyyymmddhhmmss();
+      if (!todoContent) {
+        alert("입력하쇼");
+        return;
+      }
+      todoList.push(new Todo(todoContent, stringTime));
+      document.getElementById("inputValue").value = null;
+      renderTodoList();
+    }
+    Elements.boxOutput = Elements.inputBox;
+  }
   renderTodoList();
 })();

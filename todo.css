@@ -117,11 +117,7 @@ input {
 }
 
 .sort {
-  width: 450px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: flex-end;
+  margin-top: 10px;
 }
 
 #sortByTime {
@@ -169,4 +165,34 @@ input {
 }
 .contentLine input {
   margin-right: 8px;
+}
+
+.extend-button {
+  background: url(./icons/extendBtn.png) no-repeat;
+  background-size: 80px;
+  z-index: 2;
+  cursor: pointer;
+  width: 80px;
+  height: 80px;
+  display: block;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 216px;
+  bottom: -40px;
+}
+.input-box {
+  width: 512px;
+  background-color: #f8f9fa;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  border-top: 1px solid #e9ecef;
+}
+.inputWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 50px;
+  padding-top: 10px;
 }
