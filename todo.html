@@ -12,19 +12,24 @@
     <title>Todo-List</title>
   </head>
   <body>
-    <div class="topNav" id="topNav">
-      <h1>Todo List</h1>
-      <input
-        id="inputValue"
-        type="text"
-        placeholder="해야할 일을 입력하세요."
-      />
-      <input id="submitButton" type="submit" value="확인" />
-      <div class="sort">
-        <input id="sortByTime" type="button" value="시간순" />
-        <input id="sortyByContent" type="button" value="내용순" />
+    <div class="form">
+      <div class="topNav" id="topNav">
+        <h1 id="now"></h1>
+        <div id="day" class="day">수요일</div>
+        <div id="tasksLeft" class="tasks-left"></div>
+        <input
+          id="inputValue"
+          type="text"
+          placeholder="해야할 일을 입력하세요."
+          maxlength="40"
+        />
+        <input id="submitButton" type="submit" value="확인" />
+        <div class="sort">
+          <input id="sortByTime" type="button" value="시간순" />
+          <input id="sortyByContent" type="button" value="내용순" />
+        </div>
       </div>
+      <div class="content-wrap" id="contentWrap"></div>
     </div>
-    <div class="content-wrap" id="contentWrap"></div>
   </body>
 </html>

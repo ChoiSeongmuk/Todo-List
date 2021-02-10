@@ -32,11 +32,7 @@
       (time.getMonth() + 1) +
       "월" +
       time.getDate() +
-      "일" +
-      time.getHours() +
-      "시" +
-      time.getMinutes() +
-      "분"
+      "일"
     );
   }
 
@@ -49,14 +45,15 @@
     try {
       const parsedTodoList = JSON.parse(localStorage.getItem("todoList"));
       todoList = parsedTodoList.map(pTodo => {
-        const { content, fullTime, code, time, id } = pTodo;
-        return new Todo(content, fullTime, code, time, id);
+        const { content, fullTime, time, id } = pTodo;
+        return new Todo(content, fullTime, time, id);
       });
     } catch (e) {
       console.error;
       "에러!" + e;
     }
   }
+
   function* generateID() {
     const candidates =
       "abcdefghijklmmopqrstvwuxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
@@ -101,13 +98,20 @@
 
   sortByContent.addEventListener("click", function () {
     todoList = todoList.sort(function (a, b) {
-      if (a.code < b.code || isSortedByContentAscend) {
-        return -1;
-      } else if (a.code > b.code || !isSortedByContentAscend) {
-        return 1;
+      if (isSortedByContentAscend) {
+        if (a.content < b.content) {
+          return -1;
+        } else if (a.content > b.content) {
+          return 1;
+        }
       } else {
-        return 0;
+        if (a.content > b.content) {
+          return -1;
+        } else if (a.content < b.content) {
+          return 1;
+        }
       }
+      return 0;
     }, false);
     isSortedByContentAscend = !isSortedByContentAscend;
     renderTodoList();
@@ -115,8 +119,7 @@
 
   const idGenerator = generateID();
 
-  function Todo(content, fullTime, code, time, id) {
-    this.code = code;
+  function Todo(content, fullTime, time, id) {
     this.fullTime = fullTime ?? new Date.yyyymmddhhmmss();
     this.content = content;
     this.time = time ?? getCurrentTimeString();
@@ -126,16 +129,23 @@
   Todo.prototype.drawInHtml = function () {
     var timeDiv = elt("div", { class: "time" }, this.time);
     var titldDiv = elt("div", { class: "subtitle" }, this.content);
-
+    var beforeCheck = elt("input", { class: "beforeCheck", type: "button" });
+    var contentLine = elt(
+      "div",
+      { class: "contentLine" },
+      beforeCheck,
+      titldDiv
+    );
     const todoId = this.id;
     var editbtn = elt("input", {
       type: "button",
       id: "##" + this.id,
-      value: "수정"
+      class: "editBtn"
     });
+
     editbtn.addEventListener("click", function () {
       const editText = prompt("여기에 입력하세요");
-      if (!editbtn) {
+      if (!editText) {
         alert("입력하쇼");
         return;
       }
@@ -146,22 +156,36 @@
     var removebtn = elt("input", {
       type: "button",
       id: "#" + this.id,
-      value: "삭제"
+      class: "removeButton"
     });
     removebtn.addEventListener("click", function () {
       Todo.prototype.remove(todoId);
     });
 
-    var buttonDiv = elt("div", { class: "changeButton" }, editbtn, removebtn);
-    var listDiv = elt(
+    var buttonDiv = elt(
       "div",
-      { class: "list", id: this.id },
-      timeDiv,
-      titldDiv,
-      buttonDiv
+      { class: "changeButton", id: "$" + this.id },
+      editbtn,
+      removebtn
     );
+    var listDiv = elt("div", { class: "list", id: this.id }, contentLine);
     var contentDiv = document.getElementById("contentWrap");
     contentDiv.appendChild(listDiv);
+    listDiv.addEventListener(
+      "mouseover",
+      function () {
+        contentLine.appendChild(buttonDiv);
+        document.getElementById("$" + this.id).style.visibility = "visible";
+      },
+      false
+    );
+    listDiv.addEventListener(
+      "mouseleave",
+      function () {
+        document.getElementById("$" + this.id).style.visibility = "hidden";
+      },
+      false
+    );
   };
 
   Todo.prototype.remove = function (id) {
@@ -175,13 +199,11 @@
     const todoContent = document.getElementById("inputValue").value;
     const fullTimeIs = new Date();
     const stringTime = fullTimeIs.yyyymmddhhmmss();
-    const parsedCode = todoContent;
     if (!todoContent) {
       alert("입력하쇼");
       return;
     }
-
-    todoList.push(new Todo(todoContent, stringTime, parsedCode));
+    todoList.push(new Todo(todoContent, stringTime));
     renderTodoList();
   }
 
@@ -198,6 +220,20 @@
     renderTodoList();
   }
   function renderTodoList() {
+    var today = new Date();
+    var week = [
+      "일요일",
+      "월요일",
+      "화요일",
+      "수요일",
+      "목요일",
+      "금요일",
+      "토요일"
+    ];
+
+    now.innerHTML = getCurrentTimeString();
+    day.innerHTML = week[today.getDay()];
+    tasksLeft.innerHTML = "할일 " + todoList.length + "개 남음";
     document.getElementById("inputValue").value = null;
     document.getElementById("contentWrap").innerHTML = "";
     const stringTodoList = JSON.stringify(todoList);
