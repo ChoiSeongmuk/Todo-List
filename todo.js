@@ -1,4 +1,4 @@
-(function () {
+window.onload = (function () {
   Date.prototype.yyyymmdd = function () {
     var mm = this.getMonth() + 1;
     var dd = this.getDate();
@@ -28,11 +28,11 @@
     var time = new Date();
     return (
       time.getFullYear() +
-      "년" +
+      " 년 " +
       (time.getMonth() + 1) +
-      "월" +
+      " 월" +
       time.getDate() +
-      "일"
+      " 일"
     );
   }
 
@@ -45,8 +45,8 @@
     try {
       const parsedTodoList = JSON.parse(localStorage.getItem("todoList"));
       todoList = parsedTodoList.map(pTodo => {
-        const { content, fullTime, time, id } = pTodo;
-        return new Todo(content, fullTime, time, id);
+        const { content, fullTime, time, id, isChecked } = pTodo;
+        return new Todo(content, fullTime, time, id, isChecked);
       });
     } catch (e) {
       console.error;
@@ -76,17 +76,46 @@
 
   const idGenerator = generateID();
 
-  function Todo(content, fullTime, time, id) {
+  function Todo(content, fullTime, time, id, isChecked) {
     this.fullTime = fullTime ?? new Date.yyyymmddhhmmss();
     this.content = content;
     this.time = time ?? getCurrentTimeString();
     this.id = id ?? idGenerator.next().value;
+    this.isChecked = isChecked ?? false;
   }
-
   Todo.prototype.drawInHtml = function () {
-    var timeDiv = elt("div", { class: "time" }, this.time);
-    var titldDiv = elt("div", { class: "subtitle" }, this.content);
-    var beforeCheck = elt("input", { class: "beforeCheck", type: "button" });
+    var titldDiv = elt(
+      "div",
+      { class: "subtitle", id: "*" + this.id },
+      this.content
+    );
+    var beforeCheck = elt("input", {
+      class: "beforeCheck",
+      id: "%" + this.id,
+      type: "button"
+    });
+
+    if (!this.isChecked) {
+      beforeCheck.style.background = "url(./icons/noneCheck.png)";
+      beforeCheck.style.backgroundSize = "24px";
+      titldDiv.style.color = "#495057";
+      titldDiv.style.textDecoration = "none";
+    } else {
+      beforeCheck.style.background = "url(./icons/checked.png)";
+      beforeCheck.style.backgroundSize = "24px";
+      titldDiv.style.color = "gray";
+      titldDiv.style.textDecoration = "line-through";
+    }
+
+    beforeCheck.addEventListener(
+      "click",
+      function () {
+        this.isChecked = !this.isChecked;
+        renderNav();
+        renderTodoList();
+      }.bind(this),
+      false
+    );
     var contentLine = elt(
       "div",
       { class: "contentLine" },
@@ -164,7 +193,7 @@
     todo.content = newContent;
     renderTodoList();
   }
-  function renderTodoList() {
+  function renderNav() {
     var today = new Date();
     var week = [
       "일요일",
@@ -175,14 +204,24 @@
       "금요일",
       "토요일"
     ];
-
     now.innerHTML = getCurrentTimeString();
     day.innerHTML = week[today.getDay()];
-    tasksLeft.innerHTML = "할일 " + todoList.length + "개 남음";
+
+    const leftTodoCount = todoList.reduce(function (acc, todo) {
+      console.log(todo, todo.isChecked);
+      if (!todo.isChecked) return acc + 1;
+      else return acc;
+    }, 0);
+    console.log("leftCount", leftTodoCount);
+    tasksLeft.innerHTML = "할일 " + leftTodoCount + "개 남음";
+  }
+  function renderTodoList() {
     document.getElementById("contentWrap").innerHTML = "";
     const stringTodoList = JSON.stringify(todoList);
     localStorage.setItem("todoList", stringTodoList);
     todoList.map(todo => todo.drawInHtml());
+    console.log(todoList);
+    renderNav();
   }
 
   let isClicked = new Object(null);
@@ -198,8 +237,8 @@
     Elements.inputBox = boxing;
     if (isClicked.bool) {
       extendBtn.style.transform = "rotate(0deg)";
+      Elements.boxOutput.style.transform = " 0 100% 0 rotateX(45deg)";
       Elements.boxOutput.style.display = "none";
-      console.log("true");
     } else if (!isClicked.bool) {
       extendBtn.style.transform = "rotate(215deg)";
       extendBtn.style.transition = "0.125s all ease-in";
@@ -208,7 +247,6 @@
       } else {
         Elements.boxOutput.style.display = "block";
       }
-      console.log("false");
     }
     isClicked.bool = !isClicked.bool;
   }
@@ -271,6 +309,7 @@
           if (a.content > b.content) {
             return -1;
           } else if (a.content < b.content) {
+            now;
             return 1;
           }
         }
@@ -321,13 +360,16 @@
       const todoContent = document.getElementById("inputValue").value;
       const fullTimeIs = new Date();
       const stringTime = fullTimeIs.yyyymmddhhmmss();
+
       if (!todoContent) {
         alert("입력하쇼");
         return;
       }
       todoList.push(new Todo(todoContent, stringTime));
       document.getElementById("inputValue").value = null;
+
       renderTodoList();
+      renderNav();
     }
     Elements.boxOutput = Elements.inputBox;
   }

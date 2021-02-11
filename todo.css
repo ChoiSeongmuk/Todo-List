@@ -81,9 +81,6 @@ input {
   margin-top: 24px;
   margin-bottom: 24px;
 }
-.list:hover {
-  background: rgb(120, 209, 249);
-}
 
 .time {
   padding-top: 10px;
@@ -186,6 +183,22 @@ input {
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
   border-top: 1px solid #e9ecef;
+
+  animation-duration: 0.3s;
+  animation-name: slide;
+}
+@keyframes slide {
+  from {
+    height: 0px;
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  to {
+    height: 154px;
+    opacity: 1;
+  }
 }
 .inputWrap {
   display: flex;
