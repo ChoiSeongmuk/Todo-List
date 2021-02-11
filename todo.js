@@ -28,9 +28,9 @@ window.onload = (function () {
     var time = new Date();
     return (
       time.getFullYear() +
-      " 년 " +
+      "년 " +
       (time.getMonth() + 1) +
-      " 월" +
+      "월 " +
       time.getDate() +
       " 일"
     );
@@ -96,15 +96,16 @@ window.onload = (function () {
     });
 
     if (!this.isChecked) {
-      beforeCheck.style.background = "url(./icons/noneCheck.png)";
+      beforeCheck.style.background = "url(./icons/noneCheck.png) no-repeat";
       beforeCheck.style.backgroundSize = "24px";
       titldDiv.style.color = "#495057";
       titldDiv.style.textDecoration = "none";
     } else {
-      beforeCheck.style.background = "url(./icons/checked.png)";
+      beforeCheck.style.background = "url(./icons/checked.png) no-repeat";
       beforeCheck.style.backgroundSize = "24px";
       titldDiv.style.color = "gray";
       titldDiv.style.textDecoration = "line-through";
+      titldDiv.style.border = "none";
     }
 
     beforeCheck.addEventListener(
@@ -161,14 +162,15 @@ window.onload = (function () {
       "mouseover",
       function () {
         contentLine.appendChild(buttonDiv);
-        document.getElementById("$" + this.id).style.visibility = "visible";
+        document.getElementById("$" + this.id).style.display = "flex";
       },
       false
     );
     listDiv.addEventListener(
       "mouseleave",
       function () {
-        document.getElementById("$" + this.id).style.visibility = "hidden";
+        document.getElementById("$" + this.id).remove();
+        console.log("removed");
       },
       false
     );
@@ -309,7 +311,6 @@ window.onload = (function () {
           if (a.content > b.content) {
             return -1;
           } else if (a.content < b.content) {
-            now;
             return 1;
           }
         }

@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap");
+
 * {
   margin: 0;
   padding: 0;
@@ -30,15 +32,17 @@ input {
 }
 
 .form {
-  width: 512px;
-  height: 768px;
+  width: 90%;
+  min-height: 500px;
+  height: 700px;
   position: relative;
   background-color: white;
   margin: 0 auto;
-  margin-top: 96px;
+  margin-top: 32px;
   margin-bottom: 32px;
   display: flex;
   flex-direction: column;
+  align-content: center;
   border-radius: 16px;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.04);
 }
@@ -62,7 +66,7 @@ input {
   overflow-y: auto;
 }
 #inputValue {
-  width: 438px;
+  width: 80%;
   height: 25px;
   padding-left: 10px;
 }
@@ -71,13 +75,25 @@ input {
 }
 
 #submitButton {
-  width: 10%;
-  height: 25px;
   margin-top: 10px;
+  padding: 0.25rem 1rem;
+
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+  text-decoration: none;
+
+  display: inline-block;
+  width: auto;
+
+  border: none;
+  border-radius: 4px;
+  background-color: #20c997;
+  color: white;
 }
 
 .list {
-  padding: 0px 16px;
   margin-top: 24px;
   margin-bottom: 24px;
 }
@@ -96,15 +112,18 @@ input {
   justify-content: flex-end;
 }
 .changeButton input {
-  margin: 0 10px;
+  margin: 0 px;
 }
 
 .subtitle {
-  width: 280px;
+  width: 100%;
   word-wrap: break-word;
   word-break: keep-all;
   font-size: 21px;
   color: #495057;
+}
+.subtitle:focus {
+  border: none;
 }
 
 #order {
@@ -113,11 +132,27 @@ input {
 }
 
 .sort {
-  margin-top: 10px;
+  margin-top: 0px;
 }
 
 #sortByTime {
   margin-right: 10px;
+  margin-top: 10px;
+  padding: 0.25rem 1rem;
+
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+  text-decoration: none;
+
+  display: inline-block;
+  width: auto;
+
+  border: none;
+  border-radius: 4px;
+  background-color: #20c997;
+  color: white;
 }
 
 .itemBlock {
@@ -144,11 +179,12 @@ input {
 }
 
 .beforeCheck {
+  position: relative;
   background: url(./icons/noneCheck.png) no-repeat;
   background-size: 24px;
   border: none;
   cursor: pointer;
-  width: 24px;
+  width: 32px;
   height: 24px;
 }
 
@@ -156,35 +192,37 @@ input {
   display: flex;
   width: 100%;
   align-items: center;
+  justify-content: flex-start;
   word-wrap: break-word;
   word-break: keep-all;
 }
 .contentLine input {
-  margin-right: 8px;
+  margin-right: 0px;
+}
+.contentLine input:focus {
+  border: none;
 }
 
 .extend-button {
   background: url(./icons/extendBtn.png) no-repeat;
   background-size: 80px;
-  z-index: 2;
   cursor: pointer;
   width: 80px;
   height: 80px;
-  display: block;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  left: 216px;
+  position: relative;
   bottom: -40px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .input-box {
-  width: 512px;
+  position: relative;
+  bottom: -79px;
   background-color: #f8f9fa;
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
   border-top: 1px solid #e9ecef;
 
-  animation-duration: 0.3s;
+  animation-duration: 0.5s;
   animation-name: slide;
 }
 @keyframes slide {
@@ -205,6 +243,30 @@ input {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-bottom: 50px;
+  padding-bottom: 48px;
   padding-top: 10px;
+}
+
+#sortByContent {
+  margin-top: 10px;
+  padding: 0.25rem 1rem;
+
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+  text-decoration: none;
+
+  display: inline-block;
+  width: auto;
+
+  border: none;
+  border-radius: 4px;
+  background-color: #20c997;
+  color: white;
+}
+
+#now {
+  word-wrap: break-word;
+  word-break: keep-all;
 }
