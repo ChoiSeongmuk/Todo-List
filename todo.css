@@ -91,6 +91,7 @@ input {
   border-radius: 4px;
   background-color: #20c997;
   color: white;
+  cursor: pointer;
 }
 
 .list {
@@ -153,6 +154,7 @@ input {
   border-radius: 4px;
   background-color: #20c997;
   color: white;
+  cursor: pointer;
 }
 
 .itemBlock {
@@ -264,6 +266,8 @@ input {
   border-radius: 4px;
   background-color: #20c997;
   color: white;
+
+  cursor: pointer;
 }
 
 #now {

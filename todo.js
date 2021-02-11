@@ -170,7 +170,6 @@ window.onload = (function () {
       "mouseleave",
       function () {
         document.getElementById("$" + this.id).remove();
-        console.log("removed");
       },
       false
     );
@@ -210,11 +209,9 @@ window.onload = (function () {
     day.innerHTML = week[today.getDay()];
 
     const leftTodoCount = todoList.reduce(function (acc, todo) {
-      console.log(todo, todo.isChecked);
       if (!todo.isChecked) return acc + 1;
       else return acc;
     }, 0);
-    console.log("leftCount", leftTodoCount);
     tasksLeft.innerHTML = "할일 " + leftTodoCount + "개 남음";
   }
   function renderTodoList() {
@@ -222,7 +219,6 @@ window.onload = (function () {
     const stringTodoList = JSON.stringify(todoList);
     localStorage.setItem("todoList", stringTodoList);
     todoList.map(todo => todo.drawInHtml());
-    console.log(todoList);
     renderNav();
   }
 
